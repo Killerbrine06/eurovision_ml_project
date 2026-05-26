@@ -1,0 +1,24 @@
+# --- Data Manipulation & Scraping ---
+pandas
+numpy
+requests
+beautifulsoup4
+lxml
+
+# --- APIs & Data Collection ---
+spotipy
+lyricsgenius
+
+# --- NLP & Sentiment Analysis ---
+textblob
+nltk
+
+# --- Machine Learning ---
+scikit-learn
+
+# --- Exploratory Data Analysis (EDA) & Vizualizare ---
+matplotlib
+seaborn
+
+# --- Utilitare ---
+python-dotenv
