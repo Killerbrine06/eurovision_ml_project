@@ -1,3 +1,5 @@
 */.DS_Store
 src/data_collection/fix2009.py
 data/
+.env
+models/

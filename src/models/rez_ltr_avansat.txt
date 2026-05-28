@@ -1,0 +1,20 @@
+===========================================================================
+🏆 PREDICȚIE LTR AVANSAT (Semifinala 2 - Eurovision 2026)
+===========================================================================
+Loc  | Status       | Țară            | Artist & Piesă                      | Scor 
+---------------------------------------------------------------------------
+1    | ✅ CALIFICAT  | Ukraine         | Leléka - Ridnym               | 0.34
+2    | ✅ CALIFICAT  | Australia       | Delta Goodrem - Eclipse              | 0.29
+3    | ✅ CALIFICAT  | Denmark         | Søren Torpegaard Lund - Før Vi Går Hjem      | 0.23
+4    | ✅ CALIFICAT  | Malta           | AIDAN - Bella                | -0.18
+5    | ✅ CALIFICAT  | Albania         | Alis - Nân                  | -0.55
+6    | ✅ CALIFICAT  | Norway          | JONAS LOVV - YA YA YA             | -0.84
+7    | ✅ CALIFICAT  | Cyprus          | Antigoni - JALLA                | -1.05
+8    | ✅ CALIFICAT  | Latvia          | Atvara - Ēnā                  | -1.12
+9    | ✅ CALIFICAT  | Armenia         | Simón - Paloma Rumba         | -1.22
+10   | ✅ CALIFICAT  | Azerbaijan      | JIVA - Just Go              | -1.22
+11   | ❌ ELIMINAT   | Luxembourg      | Eva Marija - Mother Nature        | -1.32
+12   | ❌ ELIMINAT   | Bulgaria        | DARA - Bangaranga           | -1.37
+13   | ❌ ELIMINAT   | Romania         | Alexandra Căpitănescu - Choke Me             | -1.43
+14   | ❌ ELIMINAT   | Switzerland     | Veronica Fusaro - Alice                | -1.60
+15   | ❌ ELIMINAT   | Czechia         | Daniel Zizka - CROSSROADS           | -1.75

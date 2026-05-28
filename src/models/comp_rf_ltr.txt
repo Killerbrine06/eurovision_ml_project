@@ -1,0 +1,74 @@
+
+============================================================
+🌲 MODEL: RANDOM FOREST (Evaluare Independentă - Prag 40%)
+============================================================
+✅ Moldova         (Satoshi) -> Șanse: 46.5%
+✅ Sweden          (FELICIA) -> Șanse: 43.8%
+✅ Croatia         (Lelek) -> Șanse: 42.6%
+✅ Greece          (Akylas) -> Șanse: 44.6%
+✅ Portugal        (Bandidos do Cante) -> Șanse: 52.9%
+✅ Georgia         (Bzikebi) -> Șanse: 56.7%
+✅ Finland         (Linda Lampenius x Pete Parkkonen) -> Șanse: 53.4%
+✅ Montenegro      (Tamara Živković) -> Șanse: 52.0%
+✅ Estonia         (Vanilla Ninja) -> Șanse: 46.5%
+✅ Israel          (Noam Bettan) -> Șanse: 67.4%
+✅ Belgium         (ESSYLA) -> Șanse: 46.3%
+✅ Lithuania       (Lion Ceccah) -> Șanse: 51.7%
+✅ San Marino      (Senhit) -> Șanse: 47.8%
+✅ Poland          (ALICJA) -> Șanse: 51.1%
+✅ Serbia          (LAVINA) -> Șanse: 57.9%
+❌ Bulgaria        (DARA) -> Șanse: 35.3%
+✅ Azerbaijan      (JIVA) -> Șanse: 45.6%
+❌ Romania         (Alexandra Căpitănescu) -> Șanse: 34.8%
+✅ Luxembourg      (Eva Marija) -> Șanse: 46.2%
+❌ Czechia         (Daniel Zizka) -> Șanse: 36.1%
+✅ Armenia         (SIMÓN) -> Șanse: 53.3%
+✅ Switzerland     (Veronica Fusaro) -> Șanse: 41.7%
+✅ Cyprus          (Antigoni) -> Șanse: 50.3%
+✅ Latvia          (Atvara) -> Șanse: 56.8%
+✅ Denmark         (Søren Torpegaard Lund) -> Șanse: 67.2%
+✅ Australia       (Delta Goodrem) -> Șanse: 70.2%
+✅ Ukraine         (LELÉKA) -> Șanse: 58.4%
+✅ Albania         (Alis) -> Șanse: 57.8%
+✅ Malta           (AIDAN) -> Șanse: 50.8%
+✅ Norway          (Jonas Lovv) -> Șanse: 54.8%
+
+Concluzie Random Forest: A vrut să califice 27 din 30 de piese (Regula ignorată).
+
+============================================================
+🏆 MODEL: XGBoost RANKER (Evaluare prin Ierarhizare - Fix 10 Calificați)
+============================================================
+
+--- REZULTATE SEMIFINALA 1 ---
+ 1. ✅ CALIFICAT | Israel          (Noam Bettan) | Scor: -0.32
+ 2. ✅ CALIFICAT | Georgia         (Bzikebi) | Scor: -0.49
+ 3. ✅ CALIFICAT | San Marino      (Senhit) | Scor: -0.54
+ 4. ✅ CALIFICAT | Serbia          (LAVINA) | Scor: -0.55
+ 5. ✅ CALIFICAT | Sweden          (FELICIA) | Scor: -0.61
+ 6. ✅ CALIFICAT | Belgium         (ESSYLA) | Scor: -0.73
+ 7. ✅ CALIFICAT | Croatia         (Lelek) | Scor: -0.74
+ 8. ✅ CALIFICAT | Portugal        (Bandidos do Cante) | Scor: -0.94
+ 9. ✅ CALIFICAT | Moldova         (Satoshi) | Scor: -0.97
+10. ✅ CALIFICAT | Lithuania       (Lion Ceccah) | Scor: -0.97
+11. ❌ ELIMINAT | Finland         (Linda Lampenius x Pete Parkkonen) | Scor: -0.99
+12. ❌ ELIMINAT | Montenegro      (Tamara Živković) | Scor: -1.03
+13. ❌ ELIMINAT | Poland          (ALICJA) | Scor: -1.10
+14. ❌ ELIMINAT | Greece          (Akylas) | Scor: -1.19
+15. ❌ ELIMINAT | Estonia         (Vanilla Ninja) | Scor: -1.77
+
+--- REZULTATE SEMIFINALA 2 ---
+ 1. ✅ CALIFICAT | Australia       (Delta Goodrem) | Scor: 0.76
+ 2. ✅ CALIFICAT | Denmark         (Søren Torpegaard Lund) | Scor: 0.75
+ 3. ✅ CALIFICAT | Ukraine         (LELÉKA) | Scor: -0.28
+ 4. ✅ CALIFICAT | Albania         (Alis) | Scor: -0.32
+ 5. ✅ CALIFICAT | Latvia          (Atvara) | Scor: -0.71
+ 6. ✅ CALIFICAT | Norway          (Jonas Lovv) | Scor: -0.79
+ 7. ✅ CALIFICAT | Armenia         (SIMÓN) | Scor: -0.88
+ 8. ✅ CALIFICAT | Azerbaijan      (JIVA) | Scor: -0.89
+ 9. ✅ CALIFICAT | Malta           (AIDAN) | Scor: -0.94
+10. ✅ CALIFICAT | Luxembourg      (Eva Marija) | Scor: -1.16
+11. ❌ ELIMINAT | Switzerland     (Veronica Fusaro) | Scor: -1.22
+12. ❌ ELIMINAT | Bulgaria        (DARA) | Scor: -1.41
+13. ❌ ELIMINAT | Czechia         (Daniel Zizka) | Scor: -1.56
+14. ❌ ELIMINAT | Cyprus          (Antigoni) | Scor: -1.56
+15. ❌ ELIMINAT | Romania         (Alexandra Căpitănescu) | Scor: -1.60

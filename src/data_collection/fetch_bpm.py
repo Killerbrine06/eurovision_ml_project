@@ -2,83 +2,128 @@ import pandas as pd
 import requests
 import time
 import os
+import unicodedata
+import re
 from dotenv import load_dotenv
 
-# Încărcăm cheia API din fișierul .env
 load_dotenv()
 API_KEY = os.getenv("GETSONGBPM_API_KEY")
 
-def get_bpm(artist, song):
-    """
-    Caută piesa folosind GetSongBPM API și returnează valoarea BPM-ului.
-    """
-    # Pasul A: Căutăm piesa pentru a obține ID-ul
-    search_url = f"https://api.getsongbpm.com/search/?type=both&api_key={API_KEY}&lookup={artist} {song}"
-    
+def normalize_for_url(text):
+    if pd.isna(text):
+        return ""
+    text = str(text).lower().replace('"', '').replace("'", "")
+    text = ''.join(c for c in unicodedata.normalize('NFD', text) if unicodedata.category(c) != 'Mn')
+    text = re.sub(r'[^a-z0-9\s]', '', text)
+    text = re.sub(r'\s+', '+', text.strip())
+    return text
+
+def extract_artist_name_from_api(features):
+    artist_data = features.get("artist")
+    if isinstance(artist_data, dict):
+        return artist_data.get("name", "")
+    elif isinstance(artist_data, list) and len(artist_data) > 0 and isinstance(artist_data[0], dict):
+        return artist_data[0].get("name", "")
+    return ""
+
+def parse_features(features):
+    artist_genres = ""
+    artist_data = features.get("artist")
+    if isinstance(artist_data, dict) and artist_data.get("genres"):
+        artist_genres = ", ".join(artist_data["genres"])
+    elif isinstance(artist_data, list) and len(artist_data) > 0 and isinstance(artist_data[0], dict):
+        if artist_data[0].get("genres"):
+            artist_genres = ", ".join(artist_data[0]["genres"])
+            
+    return {
+        'bpm': features.get("tempo"),
+        'danceability': features.get("danceability"),
+        'acousticness': features.get("acousticness"),
+        'genres': artist_genres
+    }
+
+def fetch_from_api(search_type, lookup_string, expected_artist=None):
+    search_url = f"https://api.getsong.co/search/?api_key={API_KEY}&type={search_type}&lookup={lookup_string}"
     try:
         response = requests.get(search_url)
         if response.status_code == 200:
             data = response.json()
+            search_result = data.get("search")
             
-            # Verificăm dacă am primit rezultate valide
-            if data.get("search"):
-                # Luăm primul rezultat relevant
-                song_id = data["search"][0]["song_id"]
+            if isinstance(search_result, dict) and search_result.get("error") == "no result":
+                return None
                 
-                # Pasul B: Cerem detaliile piesei folosind ID-ul
-                song_url = f"https://api.getsongbpm.com/song/?api_key={API_KEY}&id={song_id}"
-                song_response = requests.get(song_url)
+            if isinstance(search_result, list) and len(search_result) > 0:
+                if not expected_artist:
+                    return parse_features(search_result[0])
                 
-                if song_response.status_code == 200:
-                    song_data = song_response.json()
-                    if song_data.get("song"):
-                        # Extragem și returnăm BPM-ul ca număr întreg
-                        return int(song_data["song"]["tempo"])
-                        
-    except Exception as e:
-        print(f"Eroare la conectarea cu API-ul pentru {artist} - {song}: {e}")
-        
-    return pd.NA # Returnăm NaN (Not a Number) dacă piesa nu este găsită
+                norm_expected = normalize_for_url(expected_artist).replace("+", "")
+                for features in search_result:
+                    api_artist = extract_artist_name_from_api(features)
+                    norm_api = normalize_for_url(api_artist).replace("+", "")
+                    if norm_expected in norm_api or norm_api in norm_expected:
+                        return parse_features(features)
+    except Exception:
+        pass
+    return None
 
-def enrich_with_bpm():
-    cale_csv_raw = '../../data/raw/eurovision_base_data.csv'
-    cale_csv_processed = '../../data/raw/eurovision_with_bpm.csv'
+def get_song_features_with_fallback(artist, song):
+    base_artist = artist.replace('"', '').replace(" ", "+")
+    base_song = song.replace('"', '').replace(" ", "+")
+    norm_artist = normalize_for_url(artist)
+    norm_song = normalize_for_url(song)
+
+    res1 = fetch_from_api("both", f"song:{base_song}+artist:{base_artist}")
+    if res1: return res1
     
-    print("Încărcăm setul de date istoric...")
+    time.sleep(0.4)
+    res2 = fetch_from_api("both", f"song:{norm_song}+artist:{norm_artist}")
+    if res2: return res2
+        
+    time.sleep(0.4)
+    return fetch_from_api("song", norm_song, expected_artist=artist)
+
+def run_full_enrichment():
+    cale_csv_raw = '../../data/raw/eurovision_base_data.csv'
+    cale_csv_final = '../../data/raw/eurovision_with_audio_features.csv'
+    
+    print("Încărcăm setul complet de date...")
     df = pd.read_csv(cale_csv_raw)
     
-    # Inițializăm noua coloană
-    df['bpm'] = pd.NA
+    for col in ['bpm', 'danceability', 'acousticness', 'genres']:
+        df[col] = pd.NA
+        
     piese_gasite = 0
+    total_piese = len(df)
     
-    print(f"Începem interogarea GetSongBPM pentru {len(df)} piese...")
+    print(f"Lansăm execuția completă pentru toate cele {total_piese} piese. Va dura ~15-18 minute.")
     
     for index, row in df.iterrows():
-        # Curățăm numele artistului pentru o căutare mai eficientă
-        artist = str(row['artist']).split(' feat')[0].split(' ft')[0].strip()
-        song = str(row['song']).strip()
+        raw_artist = str(row['artist']).split(' feat')[0].split(' ft')[0].strip()
+        raw_song = str(row['song']).strip()
         
-        print(f"[{index+1}/{len(df)}] Caut BPM: {artist} - {song}...", end="")
+        print(f"[{index+1}/{total_piese}] {raw_artist} - {raw_song} -> ", end="")
         
-        bpm_value = get_bpm(artist, song)
+        features = get_song_features_with_fallback(raw_artist, raw_song)
         
-        if pd.notna(bpm_value):
-            df.at[index, 'bpm'] = bpm_value
+        if features:
+            df.at[index, 'bpm'] = features['bpm']
+            df.at[index, 'danceability'] = features['danceability']
+            df.at[index, 'acousticness'] = features['acousticness']
+            df.at[index, 'genres'] = features['genres']
             piese_gasite += 1
-            print(f" Găsit! ({bpm_value} BPM)")
+            print(f"SUCCES (BPM: {features['bpm']})")
         else:
-            print(" Nu a fost găsit.")
+            print("Lipsă date")
             
-        # Pauză esențială pentru a respecta limitele API-ului gratuit
-        time.sleep(1)
+        time.sleep(1.2)
         
-    print(f"\nFinalizat! S-a găsit BPM-ul pentru {piese_gasite} din {len(df)} piese.")
-    
-    df.to_csv(cale_csv_processed, index=False)
-    print(f"Dataset-ul actualizat a fost salvat în {cale_csv_processed}")
+    print(f"\nGata! Am îmbogățit dataset-ul. Piese găsite: {piese_gasite} din {total_piese}.")
+    df.to_csv(cale_csv_final, index=False)
+    print(f"Dataset-ul salvat în: {cale_csv_final}")
 
 if __name__ == "__main__":
     if not API_KEY:
-        print("Eroare: Cheia GETSONGBPM_API_KEY nu a fost găsită în fișierul .env!")
+        print("Eroare: Lipsă API KEY în .env!")
     else:
-        enrich_with_bpm()
+        run_full_enrichment()
